@@ -1,4 +1,3 @@
-
 {
   "actorSpecification": 1,
   "name": "searchleads-enrichment",
@@ -36,10 +35,16 @@
       "noOfLeads": {
         "type": "integer",
         "title": "Number of Leads",
-        "description": "The maximum number of leads to enrich from the Apollo search results. Must be in multiples of 1000 (e.g., 1000, 2000, 3000, etc.) up to 50,000. Enter a value between 1000 and 50000.",
+        "description": "The maximum number of leads to enrich from the Apollo search results. Must be in multiples of 1000 (e.g., 1000, 2000, 3000, etc.) up to 50,000.",
         "default": 1000,
         "minimum": 1000,
-        "maximum": 50000
+        "maximum": 50000,
+        "multipleOf": 1000,
+        "editor": {
+          "type": "slider",
+          "step": 1000,
+          "showInput": true
+        }
       },
       "fileName": {
         "type": "string",
@@ -51,5 +56,3 @@
     }
   }
 }
-
-
