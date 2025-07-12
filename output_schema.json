@@ -13,7 +13,7 @@
       "type": "string",
       "title": "Enrichment Status",
       "description": "Final status of the enrichment process",
-      "enum": ["Completed", "Failed", "Cancelled", "InProgress", "InQueue", "completed", "failed", "cancelled", "inprogress", "inqueue"]
+      "enum": ["completed", "failed", "cancelled", "inprogress", "inqueue"]
     },
     "file_name": {
       "type": ["string", "null"],
@@ -76,5 +76,14 @@
       "description": "ISO timestamp when the enrichment was cancelled"
     }
   },
-  "required": ["record_id", "enrichment_status", "apollo_link", "file_name", "requested_leads_count", "spreadsheet_url", "enriched_records", "credits_involved"]
+  "required": [
+    "record_id",
+    "enrichment_status",
+    "apollo_link",
+    "file_name",
+    "requested_leads_count",
+    "spreadsheet_url",
+    "enriched_records",
+    "credits_involved"
+  ]
 }

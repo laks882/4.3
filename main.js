@@ -259,9 +259,10 @@ await Actor.main(async () => {
         console.log('⚠️ No records enriched - no usage charged');
     }
 
-    await Actor.setValue('OUTPUT', result);
+    await Actor.pushData(result);
 
     console.log('🎉 Actor completed successfully!');
     console.log('📋 You can access the enriched data at the spreadsheet URL above.');
+    return result; 
 });
 
