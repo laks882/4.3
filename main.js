@@ -130,7 +130,7 @@ async function checkEnrichmentStatus(logId, originalRequest) {
             }
 
             // ✅ IMMEDIATE TERMINATION ON COMPLETION
-            if (status && status.toLowerCase() === 'completed') {
+            if (status && status.toLowerCase() === 'Completed') {
                 result = data;
                 console.log('✅ Enrichment completed successfully! Stopping polling immediately.');
                 console.log('📊 Complete result data:', JSON.stringify(data, null, 2));
