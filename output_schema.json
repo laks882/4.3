@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "title": "SearchLeads Enrichment Output",
+  "description": "Output data from the SearchLeads enrichment process",
+  "type": "object",
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "title": "Record ID",
+      "description": "Unique identifier for the enrichment request"
+    },
+    "enrichment_status": {
+      "type": "string",
+      "title": "Enrichment Status",
+      "description": "Final status of the enrichment process",
+      "enum": ["completed", "failed", "cancelled", "inprogress", "inqueue"]
+    },
+    "file_name": {
+      "type": ["string", "null"],
+      "title": "File Name",
+      "description": "Name of the file containing enriched data"
+    },
+    "enriched_records": {
+      "type": ["string", "number", "null"],
+      "title": "Enriched Records",
+      "description": "Number of records successfully enriched"
+    },
+    "credits_involved": {
+      "type": ["string", "number", "null"],
+      "title": "Credits Used",
+      "description": "Number of credits consumed for this enrichment"
+    },
+    "spreadsheet_url": {
+      "type": ["string", "null"],
+      "title": "Spreadsheet URL",
+      "description": "URL to access the enriched data spreadsheet"
+    },
+    "progress_percentage": {
+      "type": ["string", "number", "null"],
+      "title": "Progress Percentage",
+      "description": "Percentage of completion (0-100)"
+    },
+    "requested_leads_count": {
+      "type": ["string", "number", "null"],
+      "title": "Requested Leads Count",
+      "description": "Number of leads originally requested for enrichment"
+    },
+    "apollo_link": {
+      "type": ["string", "null"],
+      "title": "Apollo Link",
+      "description": "The original Apollo.io search URL used for enrichment"
+    },
+    "queue_position": {
+      "type": ["string", "number", "null"],
+      "title": "Queue Position",
+      "description": "Current position in the processing queue (when status is inqueue)"
+    },
+    "error_message": {
+      "type": ["string", "null"],
+      "title": "Error Message",
+      "description": "Detailed error message when enrichment fails"
+    },
+    "cancellation_reason": {
+      "type": ["string", "null"],
+      "title": "Cancellation Reason",
+      "description": "Reason for enrichment cancellation"
+    },
+    "failure_time": {
+      "type": ["string", "null"],
+      "title": "Failure Time",
+      "description": "ISO timestamp when the enrichment failed"
+    },
+    "cancelled_time": {
+      "type": ["string", "null"],
+      "title": "Cancelled Time",
+      "description": "ISO timestamp when the enrichment was cancelled"
+    }
+  },
+  "required": ["record_id", "enrichment_status"]
+}
