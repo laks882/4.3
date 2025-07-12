@@ -1,0 +1,22 @@
+{
+  "name": "searchleads-enrichment",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "main.js",
+  "dependencies": {
+    "apify": "^3.0.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.0.3",
+    "express": "^5.1.0",
+    "uuid": "^11.1.0"
+  },
+  "scripts": {
+    "start": "node main.js",
+    "test": "node test-direct-validation.js",
+    "test-basic": "node test-basic-validation.js",
+    "test-integration": "node test-complete-integration.js",
+    "test-server": "node test-mock-api-server.js",
+    "test-webhook": "node test-discord-verification.js",
+    "validate": "node validate-main.js"
+  }
+}
