@@ -1,7 +1,6 @@
 import { Actor } from 'apify';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import DiscordWebhookNotifier from './test-discord-webhook.js';
 
 dotenv.config();
 
@@ -12,8 +11,78 @@ const RECORDS_PER_UNIT = 1000; // Charge per 1000 records
 // ✅ Helper function for sleep
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Initialize Discord webhook notifier
-const discordNotifier = new DiscordWebhookNotifier();
+// Discord webhook configuration
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1393445359191326720/yU9TVN53T9NthPKUKz_K0cgfnExIY13cVzBuVL8OffILCr2Zi-4kn7gyiqKWkgbLJ4I-";
+
+/**
+ * Send Discord notification for failed or cancelled enrichment
+ */
+async function sendDiscordNotification(type, requestData, responseData) {
+    try {
+        console.log(`📤 Sending Discord notification for ${type} status...`);
+
+        const color = type === 'Failed' ? 0xFF0000 : 0xFFA500; // Red for failed, Orange for cancelled
+        const title = type === 'Failed' ? "🚨 Enrichment Request Failed" : "⏹️ Enrichment Request Cancelled";
+
+        const embed = {
+            title,
+            color,
+            fields: [
+                {
+                    name: "Record ID",
+                    value: responseData.record_id || "Unknown",
+                    inline: true
+                },
+                {
+                    name: "File Name",
+                    value: responseData.file_name || requestData.fileName || "Unknown",
+                    inline: true
+                },
+                {
+                    name: "Requested Leads",
+                    value: responseData.requested_leads_count || requestData.noOfLeads?.toString() || "Unknown",
+                    inline: true
+                },
+                {
+                    name: type === 'Failed' ? "Error Message" : "Cancellation Reason",
+                    value: responseData.error_message || responseData.cancellation_reason || "No details provided",
+                    inline: false
+                },
+                {
+                    name: "Apollo Link",
+                    value: responseData.apollo_link || requestData.apolloLink || "Not provided",
+                    inline: false
+                },
+                {
+                    name: type === 'Failed' ? "Failure Time" : "Cancelled Time",
+                    value: responseData.failure_time || responseData.cancelled_time || new Date().toISOString(),
+                    inline: true
+                }
+            ],
+            timestamp: new Date().toISOString(),
+            footer: {
+                text: "SearchLeads Enrichment Service"
+            }
+        };
+
+        const payload = {
+            content: type === 'Failed' ? "⚠️ **Enrichment Request Failed**" : "🛑 **Enrichment Request Cancelled**",
+            embeds: [embed]
+        };
+
+        const response = await axios.post(DISCORD_WEBHOOK_URL, payload, {
+            headers: { 'Content-Type': 'application/json' },
+            timeout: 10000
+        });
+
+        console.log('✅ Discord notification sent successfully');
+        return { success: true };
+
+    } catch (error) {
+        console.error('❌ Failed to send Discord notification:', error.message);
+        return { success: false, error: error.message };
+    }
+}
 
 /**
  * Enhanced status checking with immediate termination on completion
@@ -71,14 +140,14 @@ async function checkEnrichmentStatus(logId, originalRequest) {
             // Handle failure states with Discord notifications
             if (status && status.toLowerCase() === 'failed') {
                 console.log('❌ Enrichment failed. Sending Discord notification...');
-                await discordNotifier.sendFailedNotification(originalRequest, data);
+                await sendDiscordNotification('Failed', originalRequest, data);
                 throw new Error(`Enrichment failed: ${data.error_message || 'Unknown error'}`);
             }
 
             // Handle cancellation states with Discord notifications
             if (status && status.toLowerCase() === 'cancelled') {
                 console.log('🛑 Enrichment cancelled. Sending Discord notification...');
-                await discordNotifier.sendCancelledNotification(originalRequest, data);
+                await sendDiscordNotification('Cancelled', originalRequest, data);
                 throw new Error(`Enrichment cancelled: ${data.cancellation_reason || 'Unknown reason'}`);
             }
 
@@ -124,10 +193,14 @@ async function checkEnrichmentStatus(logId, originalRequest) {
     return result;
 }
 
-const run = async () => {
-    await Actor.init();
-
+// Main actor function
+await Actor.main(async () => {
     const input = await Actor.getInput();
+
+    if (!input) {
+        throw new Error('No input provided. Please provide apolloLink, noOfLeads, and fileName.');
+    }
+
     console.log('🚀 Starting SearchLeads enrichment process...');
     console.log('📋 Input parameters:', {
         apolloLink: input.apolloLink,
@@ -190,9 +263,5 @@ const run = async () => {
 
     console.log('🎉 Actor completed successfully!');
     console.log('📋 You can access the enriched data at the spreadsheet URL above.');
-
-    await Actor.exit();
-};
-
-run();
+});
 
