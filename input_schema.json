@@ -1,0 +1,35 @@
+{
+  "title": "SearchLeads Enrichment",
+  "description": "Enrich leads from Apollo.io search results using SearchLeads API",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "apolloLink": {
+      "title": "Apollo Search Link",
+      "type": "string",
+      "description": "The Apollo.io search URL containing the leads you want to enrich. Copy the URL from your Apollo search results page.",
+      "editor": "textfield"
+    },
+    "noOfLeads": {
+      "title": "Number of Leads",
+      "type": "integer",
+      "description": "Specify the number of leads to enrich from the Apollo search results, in multiples of 1,000 (e.g., 1,000, 2,000, 3,000, etc.). Minimum: 1 (1,000 leads), Maximum: 50 (50,000 leads), Default: 1 (1,000 leads).",
+      "default": 1,
+      "editor": "number",
+      "maximum": 50,
+      "minimum": 1,
+      "unit": "1000"
+    },
+    "fileName": {
+      "title": "File Name",
+      "type": "string",
+      "description": "A descriptive name for your enriched leads file (without extension).",
+      "editor": "textfield"
+    }
+  },
+  "required": [
+    "apolloLink",
+    "noOfLeads",
+    "fileName"
+  ]
+}

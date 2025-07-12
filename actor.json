@@ -1,58 +1,7 @@
 {
   "actorSpecification": 1,
   "name": "searchleads-enrichment",
-  "title": "SearchLeads Enrichment",
-  "description": "Enrich leads from Apollo.io search results using SearchLeads API",
   "version": "1.0.0",
-  "meta": {
-    "templateId": "node-js"
-  },
-  "pricing": {
-    "type": "PER_EVENT",
-    "events": [
-      {
-        "name": "ENRICHED_RECORDS",
-        "title": "Enriched Records (per 1K)",
-        "description": "Charge based on the number of records successfully enriched, rounded up to the nearest 1000 records",
-        "price": 1.0
-      }
-    ]
-  },
-  "input": {
-    "schemaVersion": 1,
-    "title": "SearchLeads Enrichment",
-    "description": "Enrich leads from Apollo.io search results using SearchLeads API",
-    "type": "object",
-    "required": ["apolloLink", "noOfLeads", "fileName"],
-    "properties": {
-      "apolloLink": {
-        "type": "string",
-        "title": "Apollo Search Link",
-        "description": "The Apollo.io search URL containing the leads you want to enrich. Copy the URL from your Apollo search results page.",
-        "editor": "textfield",
-        "example": "https://app.apollo.io/#/people?page=1&sortAscending=false&sortByField=recommendations_score&personLocations[]=United%20States"
-      },
-      "noOfLeads": {
-        "type": "integer",
-        "title": "Number of Leads",
-        "description": "The maximum number of leads to enrich from the Apollo search results. Must be in multiples of 1000 (e.g., 1000, 2000, 3000, etc.) up to 50,000.",
-        "default": 1000,
-        "minimum": 1000,
-        "maximum": 50000,
-        "multipleOf": 1000,
-        "editor": {
-          "type": "slider",
-          "step": 1000,
-          "showInput": true
-        }
-      },
-      "fileName": {
-        "type": "string",
-        "title": "File Name",
-        "description": "A descriptive name for your enriched leads file (without extension).",
-        "editor": "textfield",
-        "example": "my_enriched_leads"
-      }
-    }
-  }
+  "buildTag": "latest",
+  "input": "./input_schema.json"
 }
